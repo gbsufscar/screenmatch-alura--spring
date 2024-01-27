@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
-public class ScreenmatchspringApplication implements CommandLineRunner {
+public class ScreenmatchSpringApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ScreenmatchspringApplication.class, args);
+		SpringApplication.run(ScreenmatchSpringApplication.class, args);
 	}
 
 	// Método da interface CommandLineRunner (Contrato). Acaba sendo um método main.
