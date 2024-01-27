@@ -1,5 +1,6 @@
 package br.com.alura.screenmatchspring.principal;
 
+import br.com.alura.screenmatchspring.model.DadosEpisodios;
 import br.com.alura.screenmatchspring.model.DadosSerie;
 import br.com.alura.screenmatchspring.model.DadosTemporada;
 import br.com.alura.screenmatchspring.service.ConsumoApi;
@@ -26,7 +27,7 @@ public class Principal {
 
 
     // Método para exibir o menu para o usuário
-    public void exibeMenu(){
+    public void exibeMenu() {
         // Entrada de dados do usuário
         System.out.println("Digite o nome da Série para busca:");
 
@@ -60,9 +61,25 @@ public class Principal {
             temporadas.add(dadosTemporada);
         }
 
-        /// Exibir os dados da consulta convertido no formato desejado
+        // Exibir os dados da consulta convertido no formato desejado
         System.out.println("TEMPORADAS - Informações convertidas no formato desejado:");
         temporadas.forEach(System.out::println);
         System.out.println("******** \n");
+
+
+        // Exibir os títulos da série por temporadas
+        for (int i = 0; i < dados.totalTemporadas(); i++) {
+            // Lista de Episódios da Temporada
+            System.out.println();
+            System.out.println("Série " + nomeSerie.toUpperCase() + ", Temporada nº " + (i+1));
+            List<DadosEpisodios> episodiosTemporada = temporadas.get(i).episodios(); // Pegar os episódios das temporadas.
+
+            // Iterar por essa lista para exibir os títulos
+            for (int j = 0; j < episodiosTemporada.size(); j++) {
+                System.out.println(episodiosTemporada.get(j).tiutulo());
+            }
+        }
+
+        //
     }
 }
