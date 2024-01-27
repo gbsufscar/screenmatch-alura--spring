@@ -1,16 +1,9 @@
 package br.com.alura.screenmatchspring;
 
-import br.com.alura.screenmatchspring.model.DadosEpisodios;
-import br.com.alura.screenmatchspring.model.DadosSerie;
-import br.com.alura.screenmatchspring.model.DadosTemporada;
-import br.com.alura.screenmatchspring.service.ConsumoApi;
-import br.com.alura.screenmatchspring.service.ConverteDados;
+import br.com.alura.screenmatchspring.principal.Principal;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootApplication
 public class ScreenmatchSpringApplication implements CommandLineRunner {
@@ -22,6 +15,16 @@ public class ScreenmatchSpringApplication implements CommandLineRunner {
 	// Método da interface CommandLineRunner (Contrato). Acaba sendo um método main.
 	@Override
 	public void run(String... args) throws Exception {
+		// Instanciar a Classe Principal
+		Principal principal = new Principal();
+
+		// Método para Exibir o Menu
+		principal.exibeMenu();
+
+
+		/*
+		PARTE DO CÓDIGO REFATORADA PARA A CLASSE PRINCIPAL - PODE APAGAR
+
 		// Chamar Classe ConsumoApi - consulta
 		ConsumoApi consumoApi = new ConsumoApi();
 
@@ -106,6 +109,7 @@ public class ScreenmatchSpringApplication implements CommandLineRunner {
 		System.out.println("TEMPORADAS - Informações convertidas no formato desejado:");
 		temporadas.forEach(System.out::println);
 		System.out.println("******** \n");
+		 */
 
 	}
 }
