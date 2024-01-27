@@ -2,11 +2,15 @@ package br.com.alura.screenmatchspring;
 
 import br.com.alura.screenmatchspring.model.DadosEpisodios;
 import br.com.alura.screenmatchspring.model.DadosSerie;
+import br.com.alura.screenmatchspring.model.DadosTemporada;
 import br.com.alura.screenmatchspring.service.ConsumoApi;
 import br.com.alura.screenmatchspring.service.ConverteDados;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class ScreenmatchspringApplication implements CommandLineRunner {
@@ -33,7 +37,7 @@ public class ScreenmatchspringApplication implements CommandLineRunner {
 		String json = consumoApi.obterDados(endereco); // Arg - endereço com a busca
 
 		/// Exibir o resultado da consulta
-		System.out.println("Exibir a consulta no formato json: \n" + json);
+		//System.out.println("Exibir a consulta no formato json: \n" + json);
 
 		/// Fazer a conversão da consulta (instancia o conversor, depois transforma o dado)
 		ConverteDados conversor = new ConverteDados();
@@ -41,12 +45,12 @@ public class ScreenmatchspringApplication implements CommandLineRunner {
 
 		/// Exibir os dados da consulta convertido no formato desejado
 		/// Mostra representado da forma do toString do Record
-		System.out.println("Informações convertidas no formato desejado: \n" + dados);
+		System.out.println("SÉRIE - Informações convertidas no formato desejado: \n" + dados);
 		System.out.println("******** \n");
 
 
 		// Busca de Informações de um Episódio
-		/// Busca da Série
+		/// Dados para busca de informações
 		busca ="gilmore girls"; // Já tipada anteriormente
 		String temporada = "1";
 		String episodio = "2";
@@ -61,7 +65,7 @@ public class ScreenmatchspringApplication implements CommandLineRunner {
 		json = consumoApi.obterDados(endereco); // Arg - endereço com a busca
 
 		/// Exibir o resultado da consulta
-		System.out.println("Exibir a consulta no formato json: \n" + json);
+		//System.out.println("Exibir a consulta no formato json: \n" + json);
 
 		/// Atualizar a variável json
 		json = consumoApi.obterDados(endereco); // Arg - endenço com a busca
@@ -71,7 +75,36 @@ public class ScreenmatchspringApplication implements CommandLineRunner {
 
 		/// Exibir os dados da consulta convertido no formato desejado
 		/// Mostra representado da forma do toString do Record
-		System.out.println("Informações convertidas no formato desejado: \n" + dadosEpisodios);
+		System.out.println("EPISÓDIO - Informações convertidas no formato desejado: \n" + dadosEpisodios);
+		System.out.println("******** \n");
+
+
+		// Busca de Informações de uma Temporada
+		/// Usar um laço for para iterar sobre o total de temporadas
+		List<DadosTemporada> temporadas = new ArrayList<>(); // Instancia a lista do tipo Dados Temporada
+		for (int i = 1; i <= dados.totalTemporadas(); i++) { // dados foi delcarado na busca de série
+			/// Dados para busca de informações
+			busca = "gilmore girls"; // Já tipada anteriormente
+			int temporadaLaco = i; // Busca a temporada a cada laço de repetição
+
+			/// Chamar método - Consulta API para obter o json usando a biblioteca GSON
+			endereco = "https://www.omdbapi.com/?t=" + busca.replace(" ", "+")
+					+ "&season=" + temporadaLaco
+					+ "&apikey=" + chave;
+
+			/// Obter o json da consulta
+			json = consumoApi.obterDados(endereco); // Arg - endereço com a busca
+
+			/// Instanciar Dados Temporada, converter e transformar o json
+			DadosTemporada dadosTemporada = conversor.obterDados(json, DadosTemporada.class);
+
+			/// Adicionar as temporadas na lista de temporadas
+			temporadas.add(dadosTemporada);
+		}
+
+		/// Exibir os dados da consulta convertido no formato desejado
+		System.out.println("TEMPORADAS - Informações convertidas no formato desejado:");
+		temporadas.forEach(System.out::println);
 		System.out.println("******** \n");
 
 	}
