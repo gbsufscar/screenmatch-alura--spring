@@ -66,7 +66,8 @@ public class Principal {
         temporadas.forEach(System.out::println);
         System.out.println("******** \n");
 
-
+        /*
+        CÓDIGO QUE SERÁ SUBSTITUÍDO POR UMA FUNÇÃO LAMBDA.
         // Exibir os títulos da série por temporadas
         for (int i = 0; i < dados.totalTemporadas(); i++) {
             // Lista de Episódios da Temporada
@@ -79,7 +80,12 @@ public class Principal {
                 System.out.println(episodiosTemporada.get(j).tiutulo());
             }
         }
+         */
 
-        //
+        // (Iterar) Exibir títulos da série por temporadas utilizando função lambda
+        /*
+        Leia-se: para toda temporada t, pega-se os episódios dela. E também percorre-se os títulos de cada episódio
+         */
+        temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.tiutulo())));
     }
 }
