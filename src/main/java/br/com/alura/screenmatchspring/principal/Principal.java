@@ -7,6 +7,7 @@ import br.com.alura.screenmatchspring.service.ConsumoApi;
 import br.com.alura.screenmatchspring.service.ConverteDados;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -66,26 +67,27 @@ public class Principal {
         temporadas.forEach(System.out::println);
         System.out.println("******** \n");
 
-        /*
-        CÓDIGO QUE SERÁ SUBSTITUÍDO POR UMA FUNÇÃO LAMBDA.
-        // Exibir os títulos da série por temporadas
-        for (int i = 0; i < dados.totalTemporadas(); i++) {
-            // Lista de Episódios da Temporada
-            System.out.println();
-            System.out.println("Série " + nomeSerie.toUpperCase() + ", Temporada nº " + (i+1));
-            List<DadosEpisodios> episodiosTemporada = temporadas.get(i).episodios(); // Pegar os episódios das temporadas.
-
-            // Iterar por essa lista para exibir os títulos
-            for (int j = 0; j < episodiosTemporada.size(); j++) {
-                System.out.println(episodiosTemporada.get(j).tiutulo());
-            }
-        }
-         */
-
         // (Iterar) Exibir títulos da série por temporadas utilizando função lambda
         /*
         Leia-se: para toda temporada t, pega-se os episódios dela. E também percorre-se os títulos de cada episódio
+        (parametro) -> expressão
          */
         temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.tiutulo())));
+        System.out.println("********");
+
+
+        // Lidando com streams (API) - fluxo de dados
+        System.out.println();
+        System.out.println("Série de Operações com Streams + função lambda: ");
+        List<String> nomes = Arrays.asList("Jacque", "Iasmin", "Paulo", "Rodrigo", "Nico");
+
+        // Fluxo de operações (encadeadas) com streams
+        nomes.stream()
+                .sorted()
+                .limit(3)
+                .filter(n -> n.startsWith("N"))
+                .map(n -> n.toUpperCase())
+                .forEach(System.out::println);
+
     }
 }
