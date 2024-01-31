@@ -3,13 +3,15 @@ package br.com.alura.screenmatchspring.principal;
 import br.com.alura.screenmatchspring.model.DadosEpisodios;
 import br.com.alura.screenmatchspring.model.DadosSerie;
 import br.com.alura.screenmatchspring.model.DadosTemporada;
+import br.com.alura.screenmatchspring.model.Episodio;
 import br.com.alura.screenmatchspring.service.ConsumoApi;
 import br.com.alura.screenmatchspring.service.ConverteDados;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Principal {
     // Atributos
@@ -72,22 +74,66 @@ public class Principal {
         Leia-se: para toda temporada t, pega-se os episódios dela. E também percorre-se os títulos de cada episódio
         (parametro) -> expressão
          */
-        temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.tiutulo())));
+        temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));
         System.out.println("********");
 
 
-        // Lidando com streams (API) - fluxo de dados
-        System.out.println();
-        System.out.println("Série de Operações com Streams + função lambda: ");
-        List<String> nomes = Arrays.asList("Jacque", "Iasmin", "Paulo", "Rodrigo", "Nico");
+        // Buscar as 5 Séries melhores avaliadas
+        /// Declarar uma lista para reunir as informações dos espisódios via stream (fluxo de informações encadeadas)
+        List<DadosEpisodios> dadosEpisodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream()) // Para trabalhar com lista dentro de outra lista
+                .collect(Collectors.toList()); // Acrescenta à nova lista (que é mutável).
 
-        // Fluxo de operações (encadeadas) com streams
-        nomes.stream()
-                .sorted()
-                .limit(3)
-                .filter(n -> n.startsWith("N"))
-                .map(n -> n.toUpperCase())
-                .forEach(System.out::println);
+        /// Buscar as séries melhores avaliadas com ordenação decrescente
+        System.out.println("\nExibir os Top 10 episódios melhores avaliados:");
+        dadosEpisodios.stream()
+                .filter(e -> !e.avaliacao().equalsIgnoreCase("N/A")) // Filtro para eliminar os episódios sem avaliação
+                .peek(e -> System.out.println("Peek - Primeiro filtro - Ignorar N/A: " + e))
+                .sorted(Comparator.comparing(DadosEpisodios::avaliacao).reversed()) // Itera comparando e ordena
+                .peek(e -> System.out.println("Peek - Ordenação: "+ e))
+                .limit(10) //Limita o número classificado
+                .map(e -> e.titulo().toUpperCase())
+                .peek(e -> System.out.println("Peek - Mapeamento: " + e))
+                .forEach(System.out::println); // Finaliza a stream com a exibição dos episódios melhores classificados
+        System.out.println("********\n");
+
+
+        // Lista de Episódios
+        /// Criar uma lista para a Objetos Episódios
+        List<Episodio> episodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream()
+                .map(d -> new Episodio(t.numero(), d))) // Número da temporada e várias informações dos episódios
+                .collect(Collectors.toList());
+
+        /// Exibir a lista de Episódios
+        System.out.println("Exibir a lista de Episódios");
+        episodios.forEach(System.out::println);
+        System.out.println("********\n");
+
+
+        // Buscar episódios por data
+        System.out.println("A partir de qual ano você deseja ver os episódios?");
+        var ano = leitura.nextInt();
+        leitura.nextLine(); // Necessário para passar a linha
+
+        /// Declarar a data de busca
+        LocalDate dataBusca = LocalDate.of(ano, 1, 1);
+
+        /// Formatar a data para a nomenclatura brasileira
+        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        /// Filtrar Episódito de Séries via uso de streams
+        episodios.stream()
+                .filter(e -> e.getDataLancamento() != null && e.getDataLancamento().isAfter(dataBusca))
+                .forEach(e -> System.out.println(
+                        "Temporada: " + e.getTemporada() +
+                                " Episódio: " + e.getTitulo() +
+                                " Data de Lançamento: " + e.getDataLancamento().format(formatador)));
+        System.out.println("********\n");
+
+
+
 
     }
+
 }
