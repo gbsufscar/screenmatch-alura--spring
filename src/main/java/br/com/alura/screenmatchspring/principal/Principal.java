@@ -132,7 +132,23 @@ public class Principal {
         System.out.println("********\n");
 
 
+        // Buscar de título de episódio por palavra-chave utilizando o stream
+        System.out.println("Digite o termo para busca do título do episódio da série: ");
+        /// Leitura do teclado
+        var trechoTiutlo = leitura.nextLine();
 
+        // Declaração do optional para viabilizar a busca por episódios em uma stream
+        Optional<Episodio> episodioBuscado = episodios.stream() // Classe Optional: tratar presença ou ausência de valores.
+                .filter(e -> e.getTitulo().toUpperCase().contains(trechoTiutlo.toUpperCase())) // A comparação é feita em maiúscula.
+                .findFirst(); // Retorna com a primeira referência do termo buscado.
+
+        // Condição exibir se o episódio foi encontrado ou não
+        if(episodioBuscado.isPresent()){
+            System.out.println("Episódio encontrado!");
+            System.out.println(("Temporada " + episodioBuscado.get().getTemporada()) + ", Título: " + episodioBuscado.get().getTitulo());
+        } else {
+            System.out.println("Inflelizmente o episódio não foi encontrado! Redefina o termo da busca.");
+        }
 
     }
 
