@@ -149,6 +149,21 @@ public class Principal {
         } else {
             System.out.println("Inflelizmente o episódio não foi encontrado! Redefina o termo da busca.");
         }
+        System.out.println("********\n");
+
+
+        // Buscar com a função map utilizando streams
+        /// Criar uma coleção do tipo Map utilizando um stream na coleção de episódios
+        Map<Integer, Double> avaliacoesPorTemporada = episodios.stream() // Key - Integer/Episódidos; Value - Double/Avaliação
+                .filter(e -> e.getAvaliacao() > 0.0) // Filtro para excluir os episódios não avaliados (N/A)
+                .collect(Collectors.groupingBy(Episodio::getTemporada, Collectors.averagingDouble(Episodio::getAvaliacao))); // Agrupamento dos dados do episódio
+
+        ///Exibir as avaliações por temporada
+        System.out.println("Exibir a notas de avaliação média por temporada:");
+        System.out.println(avaliacoesPorTemporada);
+        System.out.println("********\n");
+
+
 
     }
 
